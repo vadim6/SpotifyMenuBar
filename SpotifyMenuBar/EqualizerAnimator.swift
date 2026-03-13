@@ -3,6 +3,7 @@ import AppKit
 /// Generates menu-bar-sized equalizer images (14×12 pt, template).
 /// Call `nextFrame()` at ~15 fps while playing; `stoppedFrame()` when paused/idle.
 class EqualizerAnimator: MenuBarAnimator {
+    var isAnimated: Bool { true }
 
     private let numBars = 4
     private var heights: [CGFloat]      // 0.0 … 1.0 (normalised)

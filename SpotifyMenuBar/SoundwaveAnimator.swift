@@ -4,6 +4,7 @@ import AppKit
 /// animating independently toward a random target.  Matches the "audio waveform"
 /// look in the reference image.
 class SoundwaveAnimator: MenuBarAnimator {
+    var isAnimated: Bool { true }
 
     private let numBars  = 9
     /// Gaussian-ish envelope: constrains how tall each column can grow.
