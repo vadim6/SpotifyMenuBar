@@ -5,6 +5,7 @@ enum AnimationType: String, CaseIterable {
     case equalizer = "Equalizer"
     case soundwave = "Soundwave"
     case pulse     = "Pulse"
+    case none      = "Disable Animation"
 }
 
 class AppSettings: ObservableObject {

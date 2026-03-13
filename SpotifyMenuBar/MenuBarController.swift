@@ -83,6 +83,7 @@ class MenuBarController: NSObject {
 
         let animSub = NSMenu()
         for type in AnimationType.allCases {
+            if type == .none { animSub.addItem(.separator()) }
             let item = NSMenuItem(title: type.rawValue,
                                   action: #selector(selectAnimation(_:)), keyEquivalent: "")
             item.target            = self
@@ -177,7 +178,7 @@ class MenuBarController: NSObject {
     /// Completely idle otherwise — no CPU cost when paused or Spotify is closed.
     private func restartDisplayTimer() {
         stopDisplayTimer()
-        let needsAnimation = isPlaying
+        let needsAnimation = isPlaying && animator.isAnimated
         let needsScrolling = settings.scrollingEnabled && scroller.maxOffset > 0
         guard needsAnimation || needsScrolling else { return }
 
@@ -196,7 +197,7 @@ class MenuBarController: NSObject {
         scroller.advance(dt: 1.0 / 15.0, enabled: settings.scrollingEnabled)
         let scrollMoved = scroller.offset != prevOffset
 
-        if isPlaying {
+        if isPlaying && animator.isAnimated {
             currentAnimFrame = animator.nextFrame()
             renderButton()
         } else if scrollMoved {

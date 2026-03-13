@@ -3,6 +3,7 @@ import AppKit
 /// Heartbeat-style animation: the centre dot spikes on every beat while a ring
 /// bursts outward and fades.  Beat timing is randomised to feel alive.
 class PulseAnimator: MenuBarAnimator {
+    var isAnimated: Bool { true }
 
     private struct Ring {
         var progress: CGFloat = 0
