@@ -18,6 +18,11 @@ A lightweight macOS menu bar app that shows the currently playing Spotify track 
 - **Settings** — animation style and scrolling toggle, persisted across launches
 - **Lightweight** — native SwiftUI/AppKit, no Electron, no runtime dependencies
 
+## Demo images
+![Demo image 1](demo_1.png)
+
+![Demo image 2](demo_2.png)
+
 ## Requirements
 
 - macOS 13 Ventura or later
