@@ -1,0 +1,46 @@
+name: SpotifyMenuBar
+
+options:
+  bundleIdPrefix: com.yourname
+  createIntermediateGroups: true
+  deploymentTarget:
+    macOS: "13.0"
+
+targets:
+  SpotifyMenuBar:
+    type: application
+    platform: macOS
+    deploymentTarget: "13.0"
+
+    sources:
+      - path: SpotifyMenuBar
+        excludes:
+          - Info.plist          # managed by the info: key below
+          - AppIcons/appstore.png
+          - AppIcons/playstore.png
+      - path: SpotifyMenuBar/AppIcons/Assets.xcassets
+        type: asset
+
+    info:
+      path: SpotifyMenuBar/Info.plist
+      properties:
+        CFBundleName: SpotifyMenuBar
+        LSMinimumSystemVersion: "13.0"
+        LSUIElement: true
+        NSAppleEventsUsageDescription: "SpotifyMenuBar needs to communicate with Spotify to read the currently playing track."
+        NSPrincipalClass: NSApplication
+
+    entitlements:
+      path: SpotifyMenuBar/SpotifyMenuBar.entitlements
+      properties:
+        com.apple.security.app-sandbox: false
+
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.yourname.SpotifyMenuBar
+        SWIFT_VERSION: "5.9"
+        MACOSX_DEPLOYMENT_TARGET: "13.0"
+        ENABLE_HARDENED_RUNTIME: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_STYLE: Manual
+        CODE_SIGN_IDENTITY: "-"   # ad-hoc — triggers "Open Anyway" in macOS Security settings
