@@ -35,7 +35,15 @@ A lightweight macOS menu bar app that shows the currently playing Spotify track 
 3. Double-click to open — macOS will block it on first launch because the app is not notarized
 
 **First-launch Gatekeeper step** (one time only):
-> Open **System Settings → Privacy & Security**, scroll down, and click **Open Anyway** next to SpotifyMenuBar.
+- Option 1: 
+1. Open **System Settings → Privacy & Security**, scroll down, and click **Open Anyway** next to SpotifyMenuBar.
+
+> **NOTE: This will likely not work on Sequoia (version 15+) and onwards, see option 2**
+
+
+- Option 2:
+1. Open a Terminal
+2. Run the following command: `xattr -dr com.apple.quarantine /Applications/SpotifyMenuBar.app`
 
 ## Building from Source
 

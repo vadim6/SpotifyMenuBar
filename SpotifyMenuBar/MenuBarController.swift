@@ -114,6 +114,34 @@ class MenuBarController: NSObject {
         menu.addItem(animParent)
 
         menu.addItem(.separator())
+
+        let aboutSub = NSMenu()
+
+        let bylineItem = NSMenuItem()
+        let bylineLabel = NSTextField(labelWithString: "Vibe coded with Claude 🤖 by Vadim Freger")
+        bylineLabel.font = .menuFont(ofSize: 0)
+        bylineLabel.textColor = .labelColor
+        bylineLabel.sizeToFit()
+        let bylineView = NSView(frame: NSRect(x: 0, y: 0,
+                                              width: bylineLabel.frame.width + 26,
+                                              height: 22))
+        bylineLabel.frame.origin = NSPoint(x: 20, y: (22 - bylineLabel.frame.height) / 2)
+        bylineView.addSubview(bylineLabel)
+        bylineItem.view = bylineView
+        aboutSub.addItem(bylineItem)
+
+        let githubItem = NSMenuItem(title: "GitHub Repository",
+                                    action: #selector(openGitHub), keyEquivalent: "")
+        githubItem.target = self
+        githubItem.image  = NSImage(named: "GitHubMark")
+        aboutSub.addItem(githubItem)
+
+        let aboutParent = NSMenuItem(title: "About SpotifyMenuBar", action: nil, keyEquivalent: "")
+        aboutParent.image   = NSImage(systemSymbolName: "questionmark.square",
+                                      accessibilityDescription: nil)
+        aboutParent.submenu = aboutSub
+        menu.addItem(aboutParent)
+
         menu.addItem(NSMenuItem(title: "Quit SpotifyMenuBar",
                                 action: #selector(NSApplication.terminate(_:)),
                                 keyEquivalent: "q"))
@@ -285,6 +313,12 @@ class MenuBarController: NSObject {
         guard let raw  = sender.representedObject as? String,
               let type = AnimationType(rawValue: raw) else { return }
         settings.animationType = type
+    }
+
+    @objc private func openGitHub() {
+        if let url = URL(string: "https://github.com/vadim6/SpotifyMenuBar") {
+            NSWorkspace.shared.open(url)
+        }
     }
 
     @objc private func openSpotify() {
