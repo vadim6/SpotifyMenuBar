@@ -28,10 +28,11 @@ class MenuBarController: NSObject {
     private let barHeight:  CGFloat  = 16
 
     // Menu items
-    private let trackNameItem = NSMenuItem(title: "Not playing", action: nil, keyEquivalent: "")
-    private let artistItem    = NSMenuItem(title: "",            action: nil, keyEquivalent: "")
-    private var scrollMenuItem: NSMenuItem!
-    private var animMenuItems = [AnimationType: NSMenuItem]()
+    private let trackNameItem   = NSMenuItem(title: "Not playing", action: nil, keyEquivalent: "")
+    private let artistItem      = NSMenuItem(title: "",            action: nil, keyEquivalent: "")
+    private var scrollMenuItem:   NSMenuItem!
+    private var animMenuItems   = [AnimationType: NSMenuItem]()
+    private let controlsView    = PlaybackControlsView(frame: NSRect(x: 0, y: 0, width: 200, height: 36))
 
     // MARK: - Init
 
@@ -67,6 +68,22 @@ class MenuBarController: NSObject {
         menu.addItem(trackNameItem)
         menu.addItem(artistItem)
         menu.addItem(.separator())
+
+        let controlsItem = NSMenuItem()
+        controlsItem.view = controlsView
+        controlsView.onPrevious  = { [weak self] in
+            // Reset position to 0 first so Spotify always skips to the previous song
+            // rather than restarting the current one.
+            self?.sendSpotifyScript("""
+                tell application "Spotify"
+                    set player position to 0
+                    previous track
+                end tell
+                """)
+        }
+        controlsView.onPlayPause = { [weak self] in self?.sendSpotifyCommand("playpause") }
+        controlsView.onNext      = { [weak self] in self?.sendSpotifyCommand("next track") }
+        menu.addItem(controlsItem)
 
         let openItem = NSMenuItem(title: "Open Spotify",
                                   action: #selector(openSpotify), keyEquivalent: "")
@@ -140,8 +157,9 @@ class MenuBarController: NSObject {
 
     private func update(with track: SpotifyTrack?) {
         guard let track else {
-            isPlaying        = false
-            currentFullTitle = ""
+            isPlaying              = false
+            controlsView.isPlaying = false
+            currentFullTitle       = ""
             cachedAttrStr    = nil
             cachedTextWidth  = 0
             scroller.configure(textWidth: 0, visibleWidth: textAreaW)
@@ -154,9 +172,10 @@ class MenuBarController: NSObject {
         }
 
         let newTitle = "\(track.artist) – \(track.name)"
-        isPlaying    = track.isPlaying
-        trackNameItem.title = track.name
-        artistItem.title    = track.artist.isEmpty ? "" : "by \(track.artist)"
+        isPlaying             = track.isPlaying
+        controlsView.isPlaying = track.isPlaying
+        trackNameItem.title   = track.name
+        artistItem.title      = track.artist.isEmpty ? "" : "by \(track.artist)"
 
         if newTitle != currentFullTitle {
             currentFullTitle = newTitle
@@ -244,6 +263,19 @@ class MenuBarController: NSObject {
     }
 
     // MARK: - Menu actions
+
+    private func sendSpotifyCommand(_ command: String) {
+        sendSpotifyScript("tell application \"Spotify\" to \(command)")
+    }
+
+    private func sendSpotifyScript(_ script: String) {
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+        task.arguments     = ["-e", script]
+        task.standardOutput = Pipe()
+        task.standardError  = Pipe()
+        try? task.run()
+    }
 
     @objc private func toggleScrolling() {
         settings.scrollingEnabled.toggle()
