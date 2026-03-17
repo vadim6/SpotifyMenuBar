@@ -1,7 +1,7 @@
 name: SpotifyMenuBar
 
 options:
-  bundleIdPrefix: com.yourname
+  bundleIdPrefix: com.vadim6
   createIntermediateGroups: true
   deploymentTarget:
     macOS: "13.0"
@@ -37,7 +37,7 @@ targets:
 
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.yourname.SpotifyMenuBar
+        PRODUCT_BUNDLE_IDENTIFIER: com.vadim6.SpotifyMenuBar
         SWIFT_VERSION: "5.9"
         MACOSX_DEPLOYMENT_TARGET: "13.0"
         ENABLE_HARDENED_RUNTIME: NO

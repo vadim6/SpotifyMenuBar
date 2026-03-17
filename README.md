@@ -63,7 +63,7 @@ open SpotifyMenuBar.xcodeproj
 
 Then press **⌘R** to build and run.
 
-> **Note:** Before archiving for distribution, update `PRODUCT_BUNDLE_IDENTIFIER` in `project.yml` from `com.yourname.SpotifyMenuBar` to your own identifier.
+> **Note:** Before archiving for distribution, update `PRODUCT_BUNDLE_IDENTIFIER` in `project.yml` from `com.vadim6.SpotifyMenuBar` to your own identifier.
 
 ## How it works
 
