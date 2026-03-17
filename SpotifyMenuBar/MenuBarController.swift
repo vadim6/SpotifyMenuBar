@@ -1,5 +1,6 @@
 import AppKit
 import Combine
+import ServiceManagement
 
 class MenuBarController: NSObject {
 
@@ -97,6 +98,12 @@ class MenuBarController: NSObject {
         scrollMenuItem.target = self
         scrollMenuItem.state  = settings.scrollingEnabled ? .on : .off
         menu.addItem(scrollMenuItem)
+
+        let launchItem = NSMenuItem(title: "Launch at Login",
+                                    action: #selector(toggleLaunchAtLogin), keyEquivalent: "")
+        launchItem.target = self
+        launchItem.state  = SMAppService.mainApp.status == .enabled ? .on : .off
+        menu.addItem(launchItem)
 
         let animSub = NSMenu()
         for type in AnimationType.allCases {
@@ -307,6 +314,16 @@ class MenuBarController: NSObject {
 
     @objc private func toggleScrolling() {
         settings.scrollingEnabled.toggle()
+    }
+
+    @objc private func toggleLaunchAtLogin(_ sender: NSMenuItem) {
+        if sender.state == .on {
+            try? SMAppService.mainApp.unregister()
+            sender.state = .off
+        } else {
+            try? SMAppService.mainApp.register()
+            sender.state = .on
+        }
     }
 
     @objc private func selectAnimation(_ sender: NSMenuItem) {
